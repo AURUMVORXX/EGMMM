@@ -6,6 +6,11 @@ namespace GOTHIC_ENGINE {
 	void AXConsole::init()
 	{
 		registerCommand("GOTO LOCATION", 0, &AXConsole::cmd_gotoLocation);
+		registerCommand("GOTO NEWWORLD", 0, &AXConsole::cmd_gotoNewworld);
+		registerCommand("GOTO OLDWORLD", 0, &AXConsole::cmd_gotoOldworld);
+		registerCommand("GOTO ADDONWORLD", 0, &AXConsole::cmd_gotoAddonworld);
+		registerCommand("GOTO DRAGONISLAND", 0, &AXConsole::cmd_gotoDragonisland);
+		registerCommand("GOTO KOLONIE", 0, &AXConsole::cmd_gotoKolonie);
 
 		zcon->AddEvalFunc(AXConsole_Eval);
 	}
@@ -29,5 +34,70 @@ namespace GOTHIC_ENGINE {
 			message = zSTRING(CStringA::Combine("[ERROR]: World \'%s\' doesn't exist!", worldName));
 
 		delete world;
+	}
+
+	void AXConsole::cmd_gotoNewworld(Array<CString> args, zSTRING& message)
+	{
+		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
+
+		zSTRING worldName = "NEWWORLD/NEWWORLD.ZEN";
+
+		args.Clear();
+		args.Insert(worldName);
+		args.Insert(startpoint);
+
+		cmd_gotoLocation(args, message);
+	}
+
+	void AXConsole::cmd_gotoDragonisland(Array<CString> args, zSTRING& message)
+	{
+		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
+
+		zSTRING worldName = "NEWWORLD/DRAGONISLAND.ZEN";
+
+		args.Clear();
+		args.Insert(worldName);
+		args.Insert(startpoint);
+
+		cmd_gotoLocation(args, message);
+	}
+
+	void AXConsole::cmd_gotoOldworld(Array<CString> args, zSTRING& message)
+	{
+		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
+
+		zSTRING worldName = "OLDWORLD/OLDWORLD.ZEN";
+
+		args.Clear();
+		args.Insert(worldName);
+		args.Insert(startpoint);
+
+		cmd_gotoLocation(args, message);
+	}
+
+	void AXConsole::cmd_gotoAddonworld(Array<CString> args, zSTRING& message)
+	{
+		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
+
+		zSTRING worldName = "ADDON/ADDONWORLD.ZEN";
+
+		args.Clear();
+		args.Insert(worldName);
+		args.Insert(startpoint);
+
+		cmd_gotoLocation(args, message);
+	}
+
+	void AXConsole::cmd_gotoKolonie(Array<CString> args, zSTRING& message)
+	{
+		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
+
+		zSTRING worldName = "G1/COLONY.ZEN";
+
+		args.Clear();
+		args.Insert(worldName);
+		args.Insert(startpoint);
+
+		cmd_gotoLocation(args, message);
 	}
 }

@@ -26,6 +26,11 @@ namespace GOTHIC_ENGINE {
 		const int processCommand(CStringA&, zSTRING&);
 
 		void cmd_gotoLocation(Array<CString>, zSTRING&);
+		void cmd_gotoNewworld(Array<CString>, zSTRING&);
+		void cmd_gotoOldworld(Array<CString>, zSTRING&);
+		void cmd_gotoAddonworld(Array<CString>, zSTRING&);
+		void cmd_gotoDragonisland(Array<CString>, zSTRING&);
+		void cmd_gotoKolonie(Array<CString>, zSTRING&);
 	};
 
 }
