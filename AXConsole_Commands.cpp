@@ -40,7 +40,7 @@ namespace GOTHIC_ENGINE {
 	{
 		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
 
-		zSTRING worldName = "NEWWORLD/NEWWORLD.ZEN";
+		zSTRING worldName = "LOC_NEWWORLD.ZEN";
 
 		args.Clear();
 		args.Insert(worldName);
@@ -53,7 +53,7 @@ namespace GOTHIC_ENGINE {
 	{
 		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
 
-		zSTRING worldName = "NEWWORLD/DRAGONISLAND.ZEN";
+		zSTRING worldName = "LOC_DRAGONISLAND.ZEN";
 
 		args.Clear();
 		args.Insert(worldName);
@@ -66,7 +66,7 @@ namespace GOTHIC_ENGINE {
 	{
 		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
 
-		zSTRING worldName = "OLDWORLD/OLDWORLD.ZEN";
+		zSTRING worldName = "LOC_OLDWORLD.ZEN";
 
 		args.Clear();
 		args.Insert(worldName);
@@ -79,7 +79,7 @@ namespace GOTHIC_ENGINE {
 	{
 		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
 
-		zSTRING worldName = "ADDON/ADDONWORLD.ZEN";
+		zSTRING worldName = "LOC_ADDONWORLD.ZEN";
 
 		args.Clear();
 		args.Insert(worldName);
@@ -92,7 +92,7 @@ namespace GOTHIC_ENGINE {
 	{
 		CStringA startpoint = args.GetNum() >= 1 && !args[1].IsEmpty() ? args[1] : "START";
 
-		zSTRING worldName = "G1/COLONY.ZEN";
+		zSTRING worldName = "LOC_COLONY.ZEN";
 
 		args.Clear();
 		args.Insert(worldName);
