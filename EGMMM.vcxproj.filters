@@ -2784,6 +2784,9 @@
     <ClInclude Include="AXConsole.cpp">
       <Filter>Plugin\Workspace\Plugin</Filter>
     </ClInclude>
+    <ClInclude Include="AXConsole_Commands.cpp">
+      <Filter>Plugin\Workspace\Plugin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".build_settings.inl">

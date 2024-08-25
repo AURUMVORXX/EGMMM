@@ -4,6 +4,7 @@
 // Automatically generated block
 #pragma region Includes
 #include "AXConsole.cpp"
+#include "AXConsole_Commands.cpp"
 #include "Plugin.cpp"
 #pragma endregion
 
