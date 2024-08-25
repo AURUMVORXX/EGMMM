@@ -1,0 +1,6 @@
+.vs/
+Bin/
+PDB/
+EGMMM/
+
+*.vcxproj.user
