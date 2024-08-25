@@ -25,6 +25,7 @@ namespace GOTHIC_ENGINE {
 		void registerCommand(const CStringA, int, commandFunction);
 		const int processCommand(CStringA&, zSTRING&);
 
+		void cmd_gotoLocation(Array<CString>, zSTRING&);
 	};
 
 }

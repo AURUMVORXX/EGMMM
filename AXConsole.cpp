@@ -3,11 +3,6 @@
 
 namespace GOTHIC_ENGINE {
 
-	void AXConsole::init()
-	{
-		zcon->AddEvalFunc(AXConsole_Eval);
-	}
-
 	void AXConsole::registerCommand(CStringA name, int numArgs, commandFunction func)
 	{
 		zcon->Register(zSTRING(name), "");
@@ -16,20 +11,27 @@ namespace GOTHIC_ENGINE {
 
 	const int AXConsole::processCommand(CStringA& command, zSTRING& message)
 	{
+		CString			commandName;
+		int				commandArgNum;
+		commandFunction commandFunc;
+
 		command.Shrink(' ');
 
 		for (auto element : m_commands)
 		{
-			if (command.StartWith(element.first.first))
-			{
-				CStringA argline = command;
-				argline.Cut(0, element.first.first.Length()).Shrink(' ');
-				Array<CString> arglist = argline.Split(" ");
+			commandName		= element.first.first;
+			commandArgNum	= element.first.second;
+			commandFunc		= element.second;
 
-				if (arglist.GetNum() >= element.first.second)
-					(this->*element.second)(arglist, message);
+			if (command.StartWith(commandName))
+			{
+				command.Cut(0, commandName.Length()).Shrink(' ');	// cut command name from full command, leaving only command arguments
+				Array<CString> args = command.Split(" ");			// split arguments into array by SPACE delimiter
+
+				if (args.GetNum() >= commandArgNum)
+					(this->*commandFunc)(args, message);
 				else
-					message = zSTRING(CStringA::Combine("%s - wrong number of arguments (%i got, %i expected)", command, arglist.GetNum(), element.first.second));
+					message = zSTRING(CStringA::Combine("%s - wrong number of arguments (%i got, %i expected)", command, args.GetNum(), commandArgNum));
 
 				return TRUE;
 			}
