@@ -11,6 +11,7 @@ namespace GOTHIC_ENGINE {
   }
   
   void Game_Init() {
+      AXConsole::get().init();
   }
 
   void Game_Exit() {

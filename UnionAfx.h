@@ -27,6 +27,10 @@ extern "C" {
 #define ASTAPI __declspec (dllimport)
 #define VDFAPI __declspec (dllimport)
 
+#include <vector>
+#include <map>
+#include <string>
+
 
 // memory operations
 #include "Memory\Shw32.h"

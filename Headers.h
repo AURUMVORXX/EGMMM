@@ -3,6 +3,7 @@
 
 // Automatically generated block
 #pragma region Includes
+#include "AXConsole.h"
 #include "Plugin.h"
 #pragma endregion
 
