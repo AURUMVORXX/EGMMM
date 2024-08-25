@@ -2,5 +2,6 @@
 Bin/
 PDB/
 EGMMM/
+enc_*/
 
 *.vcxproj.user
