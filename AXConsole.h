@@ -10,7 +10,15 @@ namespace GOTHIC_ENGINE {
 	private:
 
 		typedef void(AXConsole::* commandFunction)(Array<CString>, zSTRING&);
-		std::map<std::pair<CStringA, int>, commandFunction> m_commands;
+
+		struct consoleCommand
+		{
+			CStringA name;
+			int argNum;
+			commandFunction execFunction;
+		};
+
+		std::vector<consoleCommand> m_commands;
 
 		AXConsole() {};
 		AXConsole(const AXConsole&) = delete;
