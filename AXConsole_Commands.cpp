@@ -134,9 +134,15 @@ namespace GOTHIC_ENGINE {
 		if (!player) return;
 
 		CStringA waypoint	= args[0];				// string - WP/FP name
+
 		oCNpc* focusNpc		= player->GetFocusNpc();
-		
-		focusNpc->BeamTo(waypoint);
+		if (!focusNpc) return;
+
+		AXNpc* castedNpc = zDYNAMIC_CAST<AXNpc>(focusNpc);
+		if (!castedNpc) return;
+
+		castedNpc->setHolded(true);
+		castedNpc->BeamTo(waypoint);
 	}
 
 	void AXConsole::cmd_setSpeed(Array<CString> args, zSTRING& message)
@@ -233,7 +239,13 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_holdNpc(Array<CString> args, zSTRING& message)
 	{
+		if (!player) return;
 
+		oCNpc* targetNpc = player->GetFocusNpc() ? player->GetFocusNpc() : player;
+		AXNpc* castedNpc = zDYNAMIC_CAST<AXNpc>(targetNpc);
+
+		if (castedNpc)
+			castedNpc->setHolded(!castedNpc->isHolded());
 	}
 
 	void AXConsole::cmd_playTrigger(Array<CString> args, zSTRING& message)
@@ -326,7 +338,7 @@ namespace GOTHIC_ENGINE {
 
 		zTBBox3D&	protoBox			= player->human_ai->model->bbox3DLocalFixed;
 		float		scalar				= ((protoBox.maxs[VX] - protoBox.mins[VX]) + (protoBox.maxs[VZ] - protoBox.mins[VZ])) * 0.5F;
-		float		modelSizeScale		= scalar * 0.0225178;
+		float		modelSizeScale		= scalar * 0.0225178f;
 
 		zVEC3		playerPos			= player->GetPositionWorld();
 

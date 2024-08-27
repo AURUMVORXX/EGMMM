@@ -14,7 +14,7 @@ namespace GOTHIC_ENGINE {
 		struct consoleCommand
 		{
 			CStringA name;
-			int argNum;
+			uint argNum;
 			commandFunction execFunction;
 		};
 
@@ -30,7 +30,7 @@ namespace GOTHIC_ENGINE {
 
 		void init();
 		
-		void registerCommand(const CStringA, int, commandFunction);
+		void registerCommand(const CStringA, uint, commandFunction);
 		const int processCommand(CStringA&, zSTRING&);
 
 		// ------------------------------

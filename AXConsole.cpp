@@ -3,7 +3,7 @@
 
 namespace GOTHIC_ENGINE {
 
-	void AXConsole::registerCommand(CStringA name, int numArgs, commandFunction func)
+	void AXConsole::registerCommand(CStringA name, uint numArgs, commandFunction func)
 	{
 		zcon->Register(zSTRING(name), "");
 		m_commands.push_back({name, numArgs, func});

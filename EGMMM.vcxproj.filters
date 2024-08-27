@@ -2787,6 +2787,21 @@
     <ClInclude Include="AXConsole_Commands.cpp">
       <Filter>Plugin\Workspace\Plugin</Filter>
     </ClInclude>
+    <ClInclude Include="Hooks.cpp">
+      <Filter>Plugin\Workspace\Plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="AXNpc.cpp">
+      <Filter>Plugin\Workspace\Plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="AXObjectFactory.h">
+      <Filter>Plugin\Workspace\Plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="AXNpc.h">
+      <Filter>Plugin\Workspace\Plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="AXObjectFactory.cpp">
+      <Filter>Plugin\Workspace\Plugin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".build_settings.inl">
