@@ -42,6 +42,7 @@ namespace GOTHIC_ENGINE {
 		void cmd_setFreeze(Array<CString>, zSTRING&);
 
 		void cmd_clearHands(Array<CString>, zSTRING&);
+		void cmd_clearBlood(Array<CString>, zSTRING&);
 
 		void cmd_savePosition(Array<CString>, zSTRING&);
 		void cmd_loadPosition(Array<CString>, zSTRING&);
@@ -51,6 +52,10 @@ namespace GOTHIC_ENGINE {
 
 		void cmd_playTrigger(Array<CString>, zSTRING&);
 		void cmd_playFocusani(Array<CString>, zSTRING&);
+
+		void cmd_deleteNpc(Array<CString>, zSTRING&);
+
+		void cmd_createBlood(Array<CString>, zSTRING&);
 	};
 
 }

@@ -25,6 +25,7 @@ namespace GOTHIC_ENGINE {
 		registerCommand("SET FREEZE",			0, &AXConsole::cmd_setFreeze);
 
 		registerCommand("CLEAR HANDS",			0, &AXConsole::cmd_clearHands);
+		registerCommand("CLEAR BLOOD",			0, &AXConsole::cmd_clearBlood);
 
 		registerCommand("SAVE POSITION",		1, &AXConsole::cmd_savePosition);
 		registerCommand("LOAD POSITION",		1, &AXConsole::cmd_loadPosition);
@@ -34,6 +35,10 @@ namespace GOTHIC_ENGINE {
 
 		registerCommand("PLAY TRIGGER",			1, &AXConsole::cmd_playTrigger);
 		registerCommand("PLAY FOCUSANI",		1, &AXConsole::cmd_playFocusani);
+
+		registerCommand("DELETE NPC",			0, &AXConsole::cmd_deleteNpc);
+
+		registerCommand("CREATE BLOOD",			0, &AXConsole::cmd_createBlood);
 
 		zcon->AddEvalFunc(AXConsole_Eval);
 	}
@@ -187,6 +192,30 @@ namespace GOTHIC_ENGINE {
 		player->RemoveFromSlot(NPC_NODE_RIGHTHAND, TRUE, FALSE);
 	}
 
+	void AXConsole::cmd_clearBlood(Array<CString> args, zSTRING& message)
+	{
+		if (!player) return;
+
+		bool onlyFocus = args.GetNum() >= 1 && args[0] == "FOCUS";
+		auto bloodVobList = player->human_ai->bloodVobList;
+
+		if (onlyFocus)
+		{
+			oCNpc* focusNpc = player->GetFocusNpc();
+			if (!focusNpc) return;
+
+			bloodVobList = focusNpc->human_ai->bloodVobList;
+		}
+
+		for (int i = 0; i < bloodVobList.GetNum(); i++)
+		{
+			bloodVobList[i].bloodVob->RemoveVobFromWorld();
+			bloodVobList[i].bloodVob->Release();
+			bloodVobList[i].bloodVob = 0;
+			bloodVobList.RemoveIndex(i);
+		}
+	}
+
 	void AXConsole::cmd_savePosition(Array<CString> args, zSTRING& message)
 	{
 
@@ -234,5 +263,77 @@ namespace GOTHIC_ENGINE {
 		}
 		
 		focusNpc->GetModel()->StartAni(aniId, FALSE);
+	}
+
+	void AXConsole::cmd_deleteNpc(Array<CString> args, zSTRING& message)
+	{
+		if (!player) return;
+
+		float deleteRadius = args.GetNum() >= 1 ? args[0].ToReal32() : -1.0f;
+
+		// delete all NPCs in given radius
+		if (deleteRadius > 0)
+		{
+			zCArray<zCVob*> vobList = player->GetHomeWorld()->activeVobList;
+			int deletedNpcs			= 0;
+
+			zCVob* currentVob		= nullptr;
+			oCNpc* currentNpc		= nullptr;
+
+			for (int i = 0; i < vobList.GetNum(); i++)
+			{
+				currentVob = vobList[i];
+
+				if (currentVob->GetDistanceToVob(*player) >= deleteRadius)
+					continue;
+
+				if (currentVob->type == zVOB_TYPE_NSC)
+				{
+					currentNpc = zDYNAMIC_CAST<oCNpc>(currentVob);
+					if (!currentNpc) continue;
+
+					if (currentNpc->isSummoned)
+						ogame->spawnman->DeleteNpc(currentNpc);
+					else
+						currentNpc->Disable();
+
+					deletedNpcs += 1;
+				}
+			}
+
+			message = zSTRING(CStringA::Combine("[INFO]: Deleted %i NPCs in radius of %i", deletedNpcs, deleteRadius));
+			return;
+		}
+		
+		// else - delete only focus npc
+		if (deleteRadius <= 0)
+		{
+			oCNpc* focusNpc = player->GetFocusNpc();
+			if (!focusNpc) return;
+
+			if (focusNpc->isSummoned)
+				ogame->spawnman->DeleteNpc(focusNpc);
+			else
+				focusNpc->Disable();
+		}
+	}
+
+	void AXConsole::cmd_createBlood(Array<CString> args, zSTRING& message)
+	{
+		if (!player) return;
+
+		float		bloodSplatRadius	= args.GetNum() >= 1 ? args[1].ToReal32() : 1.0f;
+
+		zTBBox3D&	protoBox			= player->human_ai->model->bbox3DLocalFixed;
+		float		scalar				= ((protoBox.maxs[VX] - protoBox.mins[VX]) + (protoBox.maxs[VZ] - protoBox.mins[VZ])) * 0.5F;
+		float		modelSizeScale		= scalar * 0.0225178;
+
+		zVEC3		playerPos			= player->GetPositionWorld();
+
+		zCQuadMark* quadMark			= player->human_ai->GetBloodQuadMark();
+		float		dim = (((float(rand()) / float(RAND_MAX)) * 40 + 7) * bloodSplatRadius) * modelSizeScale;
+
+		zVEC2 size(dim, dim);
+		quadMark->CreateQuadMark(playerPos, zVEC3(0, -500, 0), size, 0);
 	}
 }
