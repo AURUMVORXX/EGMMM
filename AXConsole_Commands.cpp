@@ -42,7 +42,14 @@ namespace GOTHIC_ENGINE {
 
 		registerCommand("CREATE BLOOD",			0, &AXConsole::cmd_createBlood);
 
+		registerCommand("TEST",					0, &AXConsole::cmd_test);
+
 		zcon->AddEvalFunc(AXConsole_Eval);
+	}
+
+	void AXConsole::cmd_test(Array<CString> args, zSTRING& message)
+	{
+
 	}
 
 	// ----------------------------------------------------
