@@ -49,7 +49,7 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_registerAlias(Array<CString> args, zSTRING& message)
 	{
-		if (args[0] == "ALIAS" || args[1] == "ALIAS") return;
+		if (args[0] == "ALIAS" || isAlias(args[0])) return;
 
 		CStringA command = "";
 
@@ -57,9 +57,7 @@ namespace GOTHIC_ENGINE {
 			command += args[i] + " ";
 
 		command.Shrink(' ');
-
-		if (!isAlias(command))
-			registerAlias(args[0], command);
+		registerAlias(args[0], command);
 	}
 
 	void AXConsole::cmd_gotoLocation(Array<CString> args, zSTRING& message)
