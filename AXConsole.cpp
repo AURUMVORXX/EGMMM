@@ -3,10 +3,27 @@
 
 namespace GOTHIC_ENGINE {
 
+	bool AXConsole::isAlias(const CStringA command)
+	{
+		for (auto cmd : m_aliases)
+		{
+			if (cmd.alias == command)
+				return true;
+		}
+
+		return false;
+	}
+
 	void AXConsole::registerCommand(CStringA name, uint numArgs, commandFunction func)
 	{
 		zcon->Register(zSTRING(name), "");
 		m_commands.push_back({name, numArgs, func});
+	}
+
+	void AXConsole::registerAlias(CStringA alias, CStringA command)
+	{
+		zcon->Register(zSTRING(alias), "");
+		m_aliases.push_back({alias, command});
 	}
 
 	const int AXConsole::processCommand(CStringA& command, zSTRING& message)
@@ -32,6 +49,20 @@ namespace GOTHIC_ENGINE {
 		return FALSE;
 	}
 
+	void AXConsole::processAlias(zSTRING& command)
+	{
+		CStringA strCommand = CStringA(command).Shrink(' ');
+
+		for (auto cmd : m_aliases)
+		{
+			if (strCommand == cmd.alias)
+			{
+				command = zSTRING(cmd.original);
+				return;
+			}
+		}
+	}
+
 	// -----------------------------------------------------------
 	static zBOOL AXConsole_Eval(const zSTRING& s, zSTRING& msg) {
 
@@ -41,6 +72,9 @@ namespace GOTHIC_ENGINE {
 		};
 
 		msg = "ok";
+
+		zSTRING& cmd = const_cast<zSTRING&>(s);
+		AXConsole::get().processAlias(cmd);
 
 		return AXConsole::get().processCommand(CStringA(s), msg);
 	}

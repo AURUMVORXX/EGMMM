@@ -10,6 +10,8 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::init()
 	{
+		registerCommand("ALIAS",				2, &AXConsole::cmd_registerAlias);
+
 		registerCommand("GOTO LOCATION",		0, &AXConsole::cmd_gotoLocation);
 		registerCommand("GOTO NEWWORLD",		0, &AXConsole::cmd_gotoNewworld);
 		registerCommand("GOTO OLDWORLD",		0, &AXConsole::cmd_gotoOldworld);
@@ -44,6 +46,21 @@ namespace GOTHIC_ENGINE {
 	}
 
 	// ----------------------------------------------------
+
+	void AXConsole::cmd_registerAlias(Array<CString> args, zSTRING& message)
+	{
+		if (args[0] == "ALIAS" || args[1] == "ALIAS") return;
+
+		CStringA command = "";
+
+		for (int i = 1; i < args.GetNum(); i++)
+			command += args[i] + " ";
+
+		command.Shrink(' ');
+
+		if (!isAlias(command))
+			registerAlias(args[0], command);
+	}
 
 	void AXConsole::cmd_gotoLocation(Array<CString> args, zSTRING& message)
 	{

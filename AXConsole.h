@@ -18,7 +18,14 @@ namespace GOTHIC_ENGINE {
 			commandFunction execFunction;
 		};
 
+		struct consoleAlias
+		{
+			CStringA alias;
+			CStringA original;
+		};
+
 		std::vector<consoleCommand> m_commands;
+		std::vector<consoleAlias> m_aliases;
 
 		AXConsole() {};
 		AXConsole(const AXConsole&) = delete;
@@ -33,7 +40,13 @@ namespace GOTHIC_ENGINE {
 		void registerCommand(const CStringA, uint, commandFunction);
 		const int processCommand(CStringA&, zSTRING&);
 
+		void registerAlias(const CStringA, const CStringA);
+		bool isAlias(const CStringA);
+		void processAlias(zSTRING&);
+
 		// ------------------------------
+
+		void cmd_registerAlias(Array<CString>, zSTRING&);
 
 		void cmd_gotoLocation(Array<CString>, zSTRING&);
 		void cmd_gotoNewworld(Array<CString>, zSTRING&);
