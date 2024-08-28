@@ -239,7 +239,6 @@ namespace GOTHIC_ENGINE {
 			bloodVobList[i].bloodVob->RemoveVobFromWorld();
 			bloodVobList[i].bloodVob->Release();
 			bloodVobList[i].bloodVob = 0;
-			bloodVobList.RemoveIndex(i);
 		}
 	}
 
@@ -367,9 +366,12 @@ namespace GOTHIC_ENGINE {
 		zVEC3		playerPos			= player->GetPositionWorld();
 
 		zCQuadMark* quadMark			= player->human_ai->GetBloodQuadMark();
-		float		dim = (((float(rand()) / float(RAND_MAX)) * 40 + 7) * bloodSplatRadius) * modelSizeScale;
+		if (quadMark)
+		{
+			float		dim = (((float(rand()) / float(RAND_MAX)) * 40 + 7) * bloodSplatRadius) * modelSizeScale;
 
-		zVEC2 size(dim, dim);
-		quadMark->CreateQuadMark(playerPos, zVEC3(0, -500, 0), size, 0);
+			zVEC2 size(dim, dim);
+			quadMark->CreateQuadMark(playerPos, zVEC3(0, -500, 0), size, 0);
+		}
 	}
 }
