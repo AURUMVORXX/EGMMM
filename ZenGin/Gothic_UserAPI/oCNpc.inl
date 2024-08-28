@@ -13,3 +13,4 @@ const bool isHolded();
 // ----------------------------
 
 void Disable_IVK();
+void Equip_IVK(oCItem*);

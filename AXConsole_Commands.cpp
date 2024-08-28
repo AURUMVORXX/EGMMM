@@ -49,7 +49,7 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_test(Array<CString> args, zSTRING& message)
 	{
-		
+		ogame->setInfiniteRings(!ogame->isInfiniteRings());
 	}
 
 	// ----------------------------------------------------
@@ -60,7 +60,7 @@ namespace GOTHIC_ENGINE {
 
 		CStringA command = "";
 
-		for (int i = 1; i < args.GetNum(); i++)
+		for (uint i = 1; i < args.GetNum(); i++)
 			command += args[i] + " ";
 
 		command.Shrink(' ');

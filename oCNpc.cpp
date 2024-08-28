@@ -21,4 +21,31 @@ namespace GOTHIC_ENGINE {
 
 		THISCALL(Ivk_oCNpc_Disable)();
 	}
+
+	HOOK Ivk_oCNpc_Equip AS(&oCNpc::Equip, &oCNpc::Equip_IVK);
+	void oCNpc::Equip_IVK(oCItem* item)
+	{
+		if (ogame->isInfiniteRings() && item)
+		{
+			int category = inventory2.GetCategory(item);
+
+			if (category == INV_MAGIC && item->HasFlag(ITM_FLAG_RING))
+			{
+				if (!item->HasFlag(ITM_FLAG_ACTIVE))
+				{
+					AddItemEffects(item);
+					item->SetFlag(ITM_FLAG_ACTIVE);
+				}
+				else
+				{
+					RemoveItemEffects(item);
+					item->ClearFlag(ITM_FLAG_ACTIVE);
+				}
+
+				return;
+			}
+		}
+
+		THISCALL(Ivk_oCNpc_Equip)(item);
+	}
 }
