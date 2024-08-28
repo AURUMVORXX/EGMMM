@@ -8,7 +8,7 @@ bool m_holded{ false };
 // ----------------------------
 
 void setHolded(bool);
-bool isHolded();
+const bool isHolded();
 
 // ----------------------------
 

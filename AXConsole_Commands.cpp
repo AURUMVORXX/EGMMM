@@ -176,7 +176,9 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_setIgnorefocusitem(Array<CString> args, zSTRING& message)
 	{
+		if (!player) return;
 
+		ogame->setIgnoreFocusItems(!ogame->isIgnoreFocusItems());
 	}
 
 	void AXConsole::cmd_setHand(Array<CString> args, zSTRING& message)

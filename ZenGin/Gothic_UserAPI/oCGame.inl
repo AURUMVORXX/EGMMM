@@ -2,3 +2,9 @@
 
 // User API for oCGame
 // Add your methods here
+
+
+// ----------------------------------
+
+void setIgnoreFocusItems(bool);
+const bool isIgnoreFocusItems();

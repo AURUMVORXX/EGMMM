@@ -8,7 +8,7 @@ namespace GOTHIC_ENGINE {
 		m_holded = holded;
 	}
 
-	bool oCNpc::isHolded()
+	const bool oCNpc::isHolded()
 	{
 		return m_holded;
 	}

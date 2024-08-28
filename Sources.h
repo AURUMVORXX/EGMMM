@@ -3,11 +3,11 @@
 
 // Automatically generated block
 #pragma region Includes
+#include "oCGame.cpp"
 #include "oCNpc.cpp"
 #include "oCSpawnManager.cpp"
 #include "AXConsole.cpp"
 #include "AXConsole_Commands.cpp"
-#include "Hooks.cpp"
 #include "Plugin.cpp"
 #pragma endregion
 

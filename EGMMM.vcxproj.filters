@@ -2790,10 +2790,13 @@
     <ClInclude Include="AXConsole_Commands.cpp">
       <Filter>Plugin\Workspace\Plugin</Filter>
     </ClInclude>
-    <ClInclude Include="Hooks.cpp">
-      <Filter>Plugin\Workspace\Plugin</Filter>
-    </ClInclude>
     <ClInclude Include="oCNpc.cpp">
+      <Filter>Plugin\Workspace\Plugin\ZenGin</Filter>
+    </ClInclude>
+    <ClInclude Include="oCSpawnManager.cpp">
+      <Filter>Plugin\Workspace\Plugin\ZenGin</Filter>
+    </ClInclude>
+    <ClInclude Include="oCGame.cpp">
       <Filter>Plugin\Workspace\Plugin\ZenGin</Filter>
     </ClInclude>
   </ItemGroup>
