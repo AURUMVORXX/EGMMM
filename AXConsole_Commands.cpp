@@ -324,6 +324,8 @@ namespace GOTHIC_ENGINE {
 					currentNpc = zDYNAMIC_CAST<oCNpc>(currentVob);
 					if (!currentNpc) continue;
 
+					currentNpc->state.hasRoutine = FALSE;
+
 					if (currentNpc->isSummoned)
 						ogame->spawnman->DeleteNpc(currentNpc);
 					else
@@ -342,6 +344,8 @@ namespace GOTHIC_ENGINE {
 		{
 			oCNpc* focusNpc = player->GetFocusNpc();
 			if (!focusNpc) return;
+
+			focusNpc->state.hasRoutine = FALSE;
 
 			if (focusNpc->isSummoned)
 				ogame->spawnman->DeleteNpc(focusNpc);
