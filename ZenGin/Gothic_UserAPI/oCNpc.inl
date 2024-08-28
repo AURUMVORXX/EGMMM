@@ -12,5 +12,6 @@ const bool isHolded();
 
 // ----------------------------
 
+oCNpc* oCNpc_IVK();
 void Disable_IVK();
 void Equip_IVK(oCItem*);

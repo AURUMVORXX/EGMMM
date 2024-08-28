@@ -13,6 +13,16 @@ namespace GOTHIC_ENGINE {
 		return m_holded;
 	}
 
+	// ----------------------------------------------------
+
+	HOOK Ivk_oCNpc AS(0x0072D950, &oCNpc::oCNpc_IVK);
+	oCNpc* oCNpc::oCNpc_IVK()
+	{
+		m_holded = false;
+
+		return THISCALL(Ivk_oCNpc)();
+	}
+
 	HOOK Ivk_oCNpc_Disable AS(&oCNpc::Disable, &oCNpc::Disable_IVK);
 	void oCNpc::Disable_IVK()
 	{
