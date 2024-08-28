@@ -16,3 +16,7 @@ const bool isInfiniteRings();
 
 void setHoldTime(bool);
 const bool isHoldTime();
+
+// ----------------------------------
+
+void ShowDebugInfos_IVK();
