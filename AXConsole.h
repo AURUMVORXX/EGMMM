@@ -77,6 +77,8 @@ namespace GOTHIC_ENGINE {
 		void cmd_deleteNpc(Array<CString>, zSTRING&);
 
 		void cmd_createBlood(Array<CString>, zSTRING&);
+
+		void cmd_test(Array<CString>, zSTRING&);
 	};
 
 }

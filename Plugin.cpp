@@ -11,6 +11,7 @@ namespace GOTHIC_ENGINE {
   }
   
   void Game_Init() {
+
       AXConsole::get().init();
   }
 
@@ -81,7 +82,7 @@ namespace GOTHIC_ENGINE {
   }
   
   void Game_DefineExternals() {
-      zfactory = new AXObjectFactory();
+      
   }
 
   void Game_ApplyOptions() {

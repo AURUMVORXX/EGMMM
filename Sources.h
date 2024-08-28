@@ -3,8 +3,8 @@
 
 // Automatically generated block
 #pragma region Includes
-#include "AXNpc.cpp"
-#include "AXObjectFactory.cpp"
+#include "oCNpc.cpp"
+#include "oCSpawnManager.cpp"
 #include "AXConsole.cpp"
 #include "AXConsole_Commands.cpp"
 #include "Hooks.cpp"

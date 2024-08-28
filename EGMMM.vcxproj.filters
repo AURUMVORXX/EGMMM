@@ -214,6 +214,9 @@
     <Filter Include="Engine SDK\4. Gothic II NoTR\Overloads">
       <UniqueIdentifier>{225cc81e-eae0-432b-9f39-e93512644977}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Plugin\Workspace\Plugin\ZenGin">
+      <UniqueIdentifier>{e199c8c7-9ca5-4556-9054-8cadb9fb06b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Interface.cpp">
@@ -2790,17 +2793,8 @@
     <ClInclude Include="Hooks.cpp">
       <Filter>Plugin\Workspace\Plugin</Filter>
     </ClInclude>
-    <ClInclude Include="AXNpc.cpp">
-      <Filter>Plugin\Workspace\Plugin</Filter>
-    </ClInclude>
-    <ClInclude Include="AXObjectFactory.h">
-      <Filter>Plugin\Workspace\Plugin</Filter>
-    </ClInclude>
-    <ClInclude Include="AXNpc.h">
-      <Filter>Plugin\Workspace\Plugin</Filter>
-    </ClInclude>
-    <ClInclude Include="AXObjectFactory.cpp">
-      <Filter>Plugin\Workspace\Plugin</Filter>
+    <ClInclude Include="oCNpc.cpp">
+      <Filter>Plugin\Workspace\Plugin\ZenGin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

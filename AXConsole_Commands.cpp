@@ -49,7 +49,7 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_test(Array<CString> args, zSTRING& message)
 	{
-
+		
 	}
 
 	// ----------------------------------------------------
@@ -160,11 +160,8 @@ namespace GOTHIC_ENGINE {
 		oCNpc* focusNpc		= player->GetFocusNpc();
 		if (!focusNpc) return;
 
-		AXNpc* castedNpc = zDYNAMIC_CAST<AXNpc>(focusNpc);
-		if (!castedNpc) return;
-
-		castedNpc->setHolded(true);
-		castedNpc->BeamTo(waypoint);
+		focusNpc->setHolded(true);
+		focusNpc->BeamTo(waypoint);
 	}
 
 	void AXConsole::cmd_setSpeed(Array<CString> args, zSTRING& message)
@@ -264,10 +261,9 @@ namespace GOTHIC_ENGINE {
 		if (!player) return;
 
 		oCNpc* targetNpc = player->GetFocusNpc() ? player->GetFocusNpc() : player;
-		AXNpc* castedNpc = zDYNAMIC_CAST<AXNpc>(targetNpc);
 
-		if (castedNpc)
-			castedNpc->setHolded(!castedNpc->isHolded());
+		if (targetNpc)
+			targetNpc->setHolded(!targetNpc->isHolded());
 	}
 
 	void AXConsole::cmd_playTrigger(Array<CString> args, zSTRING& message)

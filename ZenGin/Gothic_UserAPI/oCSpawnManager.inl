@@ -3,4 +3,4 @@
 // User API for oCSpawnManager
 // Add your methods here
 
-zBOOL AX_CheckRemoveNpc(oCNpc*);
+zBOOL CheckRemoveNpc_IVK(oCNpc*);
