@@ -41,9 +41,8 @@ namespace GOTHIC_ENGINE {
 		if (!player) return;
 
 		oCNpc* focusNpc = player->GetFocusNpc();
-		if (!focusNpc) return;
 
-		if (focusNpc->isHolded())
+		if (focusNpc && focusNpc->isHolded())
 			screen->SetFontColor(zCOLOR(255, 115, 0));
 
 		THISCALL(Ivk_oCGame_UpdatePlayerStatus)();
