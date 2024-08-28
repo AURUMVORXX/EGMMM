@@ -20,3 +20,4 @@ const bool isHoldTime();
 // ----------------------------------
 
 void ShowDebugInfos_IVK();
+void UpdatePlayerStatus_IVK();

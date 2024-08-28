@@ -34,4 +34,19 @@ namespace GOTHIC_ENGINE {
 			screen->SetFontColor(zCOLOR(255, 255, 255));
 		}
 	}
+
+	HOOK Ivk_oCGame_UpdatePlayerStatus AS(&oCGame::UpdatePlayerStatus, &oCGame::UpdatePlayerStatus_IVK);
+	void oCGame::UpdatePlayerStatus_IVK()
+	{
+		if (!player) return;
+
+		oCNpc* focusNpc = player->GetFocusNpc();
+		if (!focusNpc) return;
+
+		if (focusNpc->isHolded())
+			screen->SetFontColor(zCOLOR(255, 115, 0));
+
+		THISCALL(Ivk_oCGame_UpdatePlayerStatus)();
+		screen->SetFontColor(zCOLOR(255, 255, 255));
+	}
 }
