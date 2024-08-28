@@ -8,4 +8,7 @@ namespace GOTHIC_ENGINE {
 
 	void oCGame::setInfiniteRings(bool toggle)		{ m_infiniteRings = toggle; }
 	const bool oCGame::isInfiniteRings()			{ return m_infiniteRings; }
+
+	void oCGame::setHoldTime(bool toggle)			{ m_holdTime = toggle; }
+	const bool oCGame::isHoldTime()					{ return m_holdTime; }
 }

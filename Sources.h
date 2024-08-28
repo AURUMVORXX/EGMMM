@@ -5,6 +5,7 @@
 #pragma region Includes
 #include "oCGame.cpp"
 #include "oCNpc.cpp"
+#include "oCWorldTimer.cpp"
 #include "oCSpawnManager.cpp"
 #include "AXConsole.cpp"
 #include "AXConsole_Commands.cpp"

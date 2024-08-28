@@ -4,6 +4,7 @@
 // Add your methods here
 
 bool m_infiniteRings{ false };
+bool m_holdTime{ false };
 
 // ----------------------------------
 
@@ -12,3 +13,6 @@ const bool isIgnoreFocusItems();
 
 void setInfiniteRings(bool);
 const bool isInfiniteRings();
+
+void setHoldTime(bool);
+const bool isHoldTime();
