@@ -358,7 +358,7 @@ namespace GOTHIC_ENGINE {
 	{
 		if (!player) return;
 
-		float		bloodSplatRadius	= args.GetNum() >= 1 ? args[1].ToReal32() : 1.0f;
+		float		bloodSplatRadius	= args.GetNum() >= 1 ? args[0].ToReal32() : 1.0f;
 
 		zTBBox3D&	protoBox			= player->human_ai->model->bbox3DLocalFixed;
 		float		scalar				= ((protoBox.maxs[VX] - protoBox.mins[VX]) + (protoBox.maxs[VZ] - protoBox.mins[VZ])) * 0.5F;
