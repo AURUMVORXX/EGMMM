@@ -36,6 +36,8 @@ namespace GOTHIC_ENGINE {
 		static AXConsole& get() { static AXConsole instance; return instance; }
 
 		void init();
+
+		void unregisterCommand(CStringA);
 		
 		void registerCommand(const CStringA, uint, commandFunction);
 		const int processCommand(CStringA&, zSTRING&);

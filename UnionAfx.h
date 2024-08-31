@@ -30,7 +30,7 @@ extern "C" {
 #include <vector>
 #include <map>
 #include <string>
-
+#include <algorithm>
 
 // memory operations
 #include "Memory\Shw32.h"

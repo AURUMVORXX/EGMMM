@@ -14,8 +14,25 @@ namespace GOTHIC_ENGINE {
 		return false;
 	}
 
+	void AXConsole::unregisterCommand(CStringA name)
+	{
+		zCConDat* element = zcon->list.Get(0);
+		while (element != NULL)
+		{
+			if (element->name == zSTRING(name))
+			{
+				zcon->list.Remove(element);
+				return;
+			}
+
+			element = element->next;
+		}
+	}
+
 	void AXConsole::registerCommand(CStringA name, uint numArgs, commandFunction func)
 	{
+		unregisterCommand(name);				// override existing command if needed
+
 		zcon->Register(zSTRING(name), "");
 		m_commands.push_back({name, numArgs, func});
 	}

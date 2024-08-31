@@ -2802,6 +2802,9 @@
     <ClInclude Include="oCWorldTimer.cpp">
       <Filter>Plugin\Workspace\Plugin\ZenGin</Filter>
     </ClInclude>
+    <ClInclude Include="oCGame.h">
+      <Filter>Plugin\Workspace\Plugin\ZenGin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".build_settings.inl">

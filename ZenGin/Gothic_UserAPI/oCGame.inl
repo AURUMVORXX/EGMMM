@@ -17,7 +17,20 @@ const bool isInfiniteRings();
 void setHoldTime(bool);
 const bool isHoldTime();
 
+void addSavedPosition(CStringA, oCNpc*);
+void removeSavedPosition(CStringA);
+zMAT4 getSavedPosition(CStringA);
+std::map<CStringA, int> getSavedPositionsEntries();
+
+template <typename T>
+T findSavedPosition(CStringA);
+
+void archiveSavedPositions(int);
+void unarchiveSavedPositions(int);
+
 // ----------------------------------
 
 void ShowDebugInfos_IVK();
 void UpdatePlayerStatus_IVK();
+void WriteSavegame_IVK(int, zBOOL);
+void LoadSavegame_IVK(int, zBOOL);

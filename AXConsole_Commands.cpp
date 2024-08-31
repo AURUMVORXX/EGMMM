@@ -244,17 +244,42 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_savePosition(Array<CString> args, zSTRING& message)
 	{
+		if (!player) return;
 
+		ogame->addSavedPosition(args[0], player);
 	}
 
 	void AXConsole::cmd_loadPosition(Array<CString> args, zSTRING& message)
 	{
+		if (!player) return;
 
+		zMAT4 savedTrafo = ogame->getSavedPosition(args[0]);
+		if (savedTrafo == zMAT4(0)) return;
+
+		player->SetCollDet(FALSE);
+		player->SetPositionWorld(savedTrafo.GetTranslation());
+		player->trafoObjToWorld.SetUpVector(savedTrafo.GetUpVector());
+		player->trafoObjToWorld.SetAtVector(savedTrafo.GetAtVector());
+		player->trafoObjToWorld.SetRightVector(savedTrafo.GetRightVector());
+		player->SetCollDet(TRUE);
 	}
 
 	void AXConsole::cmd_loadFocusposition(Array<CString> args, zSTRING& message)
 	{
+		if (!player) return;
 
+		oCNpc* focusNpc = player->GetFocusNpc();
+		if (!focusNpc) return;
+
+		zMAT4 savedTrafo = ogame->getSavedPosition(args[0]);
+		if (savedTrafo == zMAT4(0)) return;
+
+		focusNpc->SetCollDet(FALSE);
+		focusNpc->SetPositionWorld(savedTrafo.GetTranslation());
+		focusNpc->trafoObjToWorld.SetUpVector(savedTrafo.GetUpVector());
+		focusNpc->trafoObjToWorld.SetAtVector(savedTrafo.GetAtVector());
+		focusNpc->trafoObjToWorld.SetRightVector(savedTrafo.GetRightVector());
+		focusNpc->SetCollDet(TRUE);
 	}
 
 	void AXConsole::cmd_holdNpc(Array<CString> args, zSTRING& message)
