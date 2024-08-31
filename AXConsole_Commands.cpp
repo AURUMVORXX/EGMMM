@@ -274,6 +274,8 @@ namespace GOTHIC_ENGINE {
 		zMAT4 savedTrafo = ogame->getSavedPosition(args[0]);
 		if (savedTrafo == zMAT4(0)) return;
 
+		focusNpc->setHolded(true);
+
 		focusNpc->SetCollDet(FALSE);
 		focusNpc->SetPositionWorld(savedTrafo.GetTranslation());
 		focusNpc->trafoObjToWorld.SetUpVector(savedTrafo.GetUpVector());
