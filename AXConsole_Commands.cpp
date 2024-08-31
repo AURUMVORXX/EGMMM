@@ -153,12 +153,14 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_gotoFocuswaypoint(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		CStringA waypoint	= args[0];				// string - WP/FP name
 
 		oCNpc* focusNpc		= player->GetFocusNpc();
-		if (!focusNpc) return;
+		if (!focusNpc)
+		{
+			message = zSTRING("[ERROR]: No valid NPC in the focus");
+			return;
+		}
 
 		focusNpc->setHolded(true);
 		focusNpc->BeamTo(waypoint);
@@ -176,16 +178,12 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_setIgnorefocusitem(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		ogame->setIgnoreFocusItems(!ogame->isIgnoreFocusItems());
 	}
 
 	void AXConsole::cmd_setHand(Array<CString> args, zSTRING& message)
 	{
 		CStringA hand = args[0];					// string - `LEFT` / `RIGHT`
-
-		if (!player) return;
 
 		zCVob* focusVob = player->GetFocusVob();
 
@@ -197,14 +195,15 @@ namespace GOTHIC_ENGINE {
 			{
 				ogame->GetGameWorld()->DisableVob(item);
 				hand == "LEFT" ? player->SetLeftHand(item) : player->SetRightHand(item);
+				return;
 			}
 		}
+		
+		message = zSTRING("[ERROR]: No valid item in the focus");
 	}
 
 	void AXConsole::cmd_setFreeze(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		oCNpc* focusNpc = player->GetFocusNpc();
 		if (!focusNpc) focusNpc = player;
 
@@ -213,23 +212,23 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_clearHands(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		player->RemoveFromSlot(NPC_NODE_LEFTHAND, TRUE, FALSE);
 		player->RemoveFromSlot(NPC_NODE_RIGHTHAND, TRUE, FALSE);
 	}
 
 	void AXConsole::cmd_clearBlood(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		bool onlyFocus = args.GetNum() >= 1 && args[0] == "FOCUS";
 		auto bloodVobList = player->human_ai->bloodVobList;
 
 		if (onlyFocus)
 		{
 			oCNpc* focusNpc = player->GetFocusNpc();
-			if (!focusNpc) return;
+			if (!focusNpc)
+			{
+				message = zSTRING("[ERROR]: No valid NPC in the focus");
+				return;
+			}
 
 			bloodVobList = focusNpc->human_ai->bloodVobList;
 		}
@@ -244,17 +243,17 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_savePosition(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		ogame->addSavedPosition(args[0], player);
 	}
 
 	void AXConsole::cmd_loadPosition(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		zMAT4 savedTrafo = ogame->getSavedPosition(args[0]);
-		if (savedTrafo == zMAT4(0)) return;
+		if (savedTrafo == zMAT4(0))
+		{
+			message = zSTRING(CStringA::Combine("[ERROR]: Position '%s' not found in the current world", args[0]));
+			return;
+		}
 
 		player->SetCollDet(FALSE);
 		player->SetPositionWorld(savedTrafo.GetTranslation());
@@ -266,13 +265,19 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_loadFocusposition(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		oCNpc* focusNpc = player->GetFocusNpc();
-		if (!focusNpc) return;
+		if (!focusNpc)
+		{
+			message = zSTRING("[ERROR]: No valid NPC in the focus");
+			return;
+		}
 
 		zMAT4 savedTrafo = ogame->getSavedPosition(args[0]);
-		if (savedTrafo == zMAT4(0)) return;
+		if (savedTrafo == zMAT4(0))
+		{
+			message = zSTRING(CStringA::Combine("[ERROR]: Position '%s' not found in the current world", args[0]));
+			return;
+		}
 
 		focusNpc->setHolded(true);
 
@@ -286,12 +291,15 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_holdNpc(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		oCNpc* targetNpc = player->GetFocusNpc() ? player->GetFocusNpc() : player;
 
 		if (targetNpc)
 			targetNpc->setHolded(!targetNpc->isHolded());
+		else
+		{
+			message = zSTRING("[ERROR]: No valid NPC in the focus");
+			return;
+		}
 	}
 
 	void AXConsole::cmd_playTrigger(Array<CString> args, zSTRING& message)
@@ -299,19 +307,25 @@ namespace GOTHIC_ENGINE {
 		zSTRING vobName		= args[0];					// string
 
 		zCVob* targetVob	= ogame->GetWorld()->SearchVobByName(vobName);
-		if (!targetVob) return;
+		if (!targetVob)
+		{
+			message = zSTRING(CStringA::Combine("[ERROR]: Vob '%s' not found in the current world", %s));
+			return;
+		}
 
 		targetVob->GetEM(0)->OnTrigger(targetVob, targetVob);
 	}
 
 	void AXConsole::cmd_playFocusani(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		CStringA aniName	= args[0];					// string - animation name
 
 		oCNpc* focusNpc		= player->GetFocusNpc();
-		if (!focusNpc) return;
+		if (!focusNpc)
+		{
+			message = zSTRING("[ERROR]: No valid NPC in the focus");
+			return;
+		}
 
 		int aniId = focusNpc->GetModel()->GetAniIDFromAniName(aniName);
 		if (aniId == -1)
@@ -325,8 +339,6 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_deleteNpc(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		float deleteRadius = args.GetNum() >= 1 ? args[0].ToReal32() : -1.0f;
 
 		// delete all NPCs in given radius
@@ -382,8 +394,6 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_createBlood(Array<CString> args, zSTRING& message)
 	{
-		if (!player) return;
-
 		float		bloodSplatRadius	= args.GetNum() >= 1 ? args[0].ToReal32() : 1.0f;
 
 		zTBBox3D&	protoBox			= player->human_ai->model->bbox3DLocalFixed;

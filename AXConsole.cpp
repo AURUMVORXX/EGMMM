@@ -47,6 +47,12 @@ namespace GOTHIC_ENGINE {
 	{
 		command.Shrink(' ');
 
+		if (!player)
+		{
+			message = zSTRING("[ERROR]: No valid player to execute the command");
+			return;
+		}
+
 		for (auto cmd : m_commands)
 		{
 			if (command.StartWith(cmd.name))
@@ -57,7 +63,7 @@ namespace GOTHIC_ENGINE {
 				if (args.GetNum() >= cmd.argNum)
 					(this->*cmd.execFunction)(args, message);
 				else
-					message = zSTRING(CStringA::Combine("%s - wrong number of arguments (%i got, %i expected)", command, args.GetNum(), cmd.argNum));
+					message = zSTRING(CStringA::Combine("[ERROR]: %s - wrong number of arguments (%i got, %i expected)", command, args.GetNum(), cmd.argNum));
 
 				return TRUE;
 			}
