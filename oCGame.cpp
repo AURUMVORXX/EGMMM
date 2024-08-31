@@ -79,7 +79,7 @@ namespace GOTHIC_ENGINE {
 	{
 		zSTRING targetDir = savegameManager->GetSlotDirName(slot);
 
-		zCArchiver* archiver = zarcFactory->CreateArchiverWrite(zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDPOSITIONS_FILENAME, zARC_MODE_ASCII, TRUE, 0);
+		zCArchiver* archiver = zarcFactory->CreateArchiverWrite(zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDPOSITIONS_FILENAME, zARC_MODE_BINARY_SAFE, TRUE, 0);
 
 		std::sort(V_SavedPosition.begin(), V_SavedPosition.end());
 		std::map<CStringA, int> entries = getSavedPositionsEntries();
@@ -180,6 +180,9 @@ namespace GOTHIC_ENGINE {
 				V_SavedPosition.push_back(positionEntry{ currentWorld, positionName, trafo});
 			}
 		}
+
+		archiver->Close();
+		zRELEASE(archiver);
 	}
 
 	// ------------------------------------------
