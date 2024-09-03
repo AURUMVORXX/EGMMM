@@ -39,3 +39,4 @@ void ShowDebugInfos_IVK();
 void UpdatePlayerStatus_IVK();
 void WriteSavegame_IVK(int, zBOOL);
 void LoadSavegame_IVK(int, zBOOL);
+void ChangeLevel_IVK(const zSTRING&, const zSTRING&);

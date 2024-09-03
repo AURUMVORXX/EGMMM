@@ -207,6 +207,8 @@ namespace GOTHIC_ENGINE {
 		for (oCNpc* npc : V_HoldedNpcsToSave)
 			archiver->WriteObject(npc);
 
+		V_HoldedNpcsToSave.clear();
+
 		archiver->Close();
 		zRELEASE(archiver);
 	}
@@ -294,5 +296,12 @@ namespace GOTHIC_ENGINE {
 
 		if (loadGlobals) unarchiveSavedPositions(slot);
 		unarchiveHoldedNpcs(slot);
+	}
+
+	HOOK Ivk_oCGame_ChangeLevel AS(&oCGame::ChangeLevel, &oCGame::ChangeLevel_IVK);
+	void oCGame::ChangeLevel_IVK(const zSTRING& levelpath, const zSTRING& startpoint)
+	{
+		THISCALL(Ivk_oCGame_ChangeLevel)(levelpath, startpoint);
+		unarchiveHoldedNpcs(-1);
 	}
 }
