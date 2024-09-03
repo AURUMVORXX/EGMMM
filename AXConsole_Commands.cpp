@@ -49,7 +49,7 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_test(Array<CString> args, zSTRING& message)
 	{
-		ogame->setInfiniteRings(!ogame->isInfiniteRings());
+		
 	}
 
 	// ----------------------------------------------------
@@ -309,7 +309,7 @@ namespace GOTHIC_ENGINE {
 		zCVob* targetVob	= ogame->GetWorld()->SearchVobByName(vobName);
 		if (!targetVob)
 		{
-			message = zSTRING(CStringA::Combine("[ERROR]: Vob '%s' not found in the current world", %s));
+			message = zSTRING(CStringA::Combine("[ERROR]: Vob '%s' not found in the current world", vobName));
 			return;
 		}
 

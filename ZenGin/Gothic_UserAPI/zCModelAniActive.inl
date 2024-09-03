@@ -3,3 +3,4 @@
 // User API for zCModelAniActive
 // Add your methods here
 
+float fsavedFrame{ 0 };

@@ -50,7 +50,7 @@ namespace GOTHIC_ENGINE {
 		if (!player)
 		{
 			message = zSTRING("[ERROR]: No valid player to execute the command");
-			return;
+			return FALSE;
 		}
 
 		for (auto cmd : m_commands)

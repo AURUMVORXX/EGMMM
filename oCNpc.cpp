@@ -6,19 +6,30 @@ namespace GOTHIC_ENGINE {
 	void oCNpc::setHolded(bool holded)
 	{
 		m_holded = holded;
-	}
 
-	const bool oCNpc::isHolded()
-	{
-		return m_holded;
+		if (m_holded == true)
+		{
+			ogame->addHoldedNpc(this);
+			dontWriteIntoArchive = TRUE;
+		}
+		else
+		{
+			ogame->removeHoldedNpc(this);
+			dontWriteIntoArchive = FALSE;
+		}
 	}
+	const bool oCNpc::isHolded()					{ return m_holded; }
+
+	void oCNpc::setDontArchive(bool holded)		{ m_dontArchive = holded; }
+	const bool oCNpc::isDontArchive()				{ return m_dontArchive; }
 
 	// ----------------------------------------------------
 
 	HOOK Ivk_oCNpc AS(0x0072D950, &oCNpc::oCNpc_IVK);
 	oCNpc* oCNpc::oCNpc_IVK()
 	{
-		m_holded = false;
+		m_holded			= false;
+		m_dontArchive		= false;
 
 		return THISCALL(Ivk_oCNpc)();
 	}
@@ -57,5 +68,111 @@ namespace GOTHIC_ENGINE {
 		}
 
 		THISCALL(Ivk_oCNpc_Equip)(item);
+	}
+
+	HOOK Ivk_oCNpc_Archive AS(&oCNpc::Archive, &oCNpc::Archive_IVK);
+	void oCNpc::Archive_IVK(zCArchiver& arc)
+	{
+		THISCALL(Ivk_oCNpc_Archive)(arc);
+
+		if (isHolded())
+		{
+			// Sleeping
+			arc.WriteInt("isSleeping", sleepingMode == zVOB_SLEEPING);
+
+			// Body visuals
+			arc.WriteString("body_visualName", body_visualName);
+			arc.WriteInt("body_texVarNr", body_TexVarNr);
+			arc.WriteInt("body_texColorNr", body_TexColorNr);
+
+			// Head visuals
+			arc.WriteString("head_visualName", head_visualName);
+			arc.WriteInt("head_texVarnr", head_TexVarNr);
+
+			// Teeth visuals
+			arc.WriteInt("teeth_TexVarNr", teeth_TexVarNr);
+
+			// Anims
+			zCModel* model = GetModel();
+
+			arc.WriteInt("numActiveAnims", model->numActiveAnis);
+			
+			for (int i = 0; i < model->numActiveAnis; i++)
+			{
+				arc.WriteString("aniName", model->aniChannels[i]->protoAni->aniName);
+				arc.WriteFloat("aniFrame", model->aniChannels[i]->actFrame);
+			}
+		}
+	}
+
+	HOOK Ivk_oCNpc_Unarchive AS(&oCNpc::Unarchive, &oCNpc::Unarchive_IVK);
+	void oCNpc::Unarchive_IVK(zCArchiver& arc)
+	{
+		THISCALL(Ivk_oCNpc_Unarchive)(arc);
+
+		if (isHolded())
+		{
+			Enable(GetPositionWorld());
+
+			// *** Sleeping ***
+			zBOOL isSleeping	= arc.ReadInt("isSleeping");
+
+			// *** Body visuals ***
+			body_visualName		= arc.ReadString("body_visualName");
+			body_TexVarNr		= arc.ReadInt("body_texVarNr");
+			body_TexColorNr		= arc.ReadInt("body_texColorNr");
+
+			// *** Head visuals ***
+			head_visualName		= arc.ReadString("head_visualName");
+			head_TexVarNr		= arc.ReadInt("head_texVarnr");
+
+			// *** Teeth visuals ***
+			teeth_TexVarNr		= arc.ReadInt("teeth_TexVarNr");
+
+			if (GetModel())
+				InitModel();
+
+			// *** Anims *** 
+			zCModel* model		= GetModel();
+			int numActiveAnims	= arc.ReadInt("numActiveAnims");
+
+			zSTRING aniName;
+			float aniFrame;
+
+			for (int i = 0; i < numActiveAnims; i++)
+			{
+				aniName = arc.ReadString("aniName");
+				aniFrame = arc.ReadFloat("aniFrame");
+
+				// Set blend speed for instant anim apply + needed frame
+				zCModelAni* ani			= model->GetAniFromAniID(model->GetAniIDFromAniName(aniName));
+				ani->blendInSpeed		= zMDL_ANI_BLEND_IN_ZERO;
+				ani->blendOutSpeed		= zMDL_ANI_BLEND_OUT_ZERO;
+				model->StartAni(ani, 0);
+
+				for (int i = 0; i < model->numActiveAnis; i++)
+				{
+					if (model->aniChannels[i]->protoAni->aniName == aniName)
+					{
+						model->aniChannels[i]->actFrame = aniFrame;
+						break;
+					}
+				}
+			}
+
+			// Need to refresh anims and position in case of instant sleeping
+			int lastFrameTime		= ztimer->frameTime;
+			float lastFrameTimeF	= ztimer->frameTimeFloat;
+			ztimer->frameTime		= 1;
+			ztimer->frameTimeFloat	= 0.0001f;
+
+			DoFrameActivity();
+
+			ztimer->frameTime		= lastFrameTime;
+			ztimer->frameTimeFloat	= lastFrameTimeF;
+
+			// Apply sleeping
+			SetSleeping(isSleeping);
+		}
 	}
 }

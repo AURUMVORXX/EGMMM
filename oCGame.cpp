@@ -3,7 +3,8 @@
 
 namespace GOTHIC_ENGINE {
 	
-	const zSTRING SAVEDPOSITIONS_FILENAME = "EGMMM_POSITIONS.SAV";
+	const zSTRING SAVEDPOSITIONS_FILENAME	= "EGMMM_POSITIONS";
+	const zSTRING SAVEDNPCS_FILENAME		= "EGMMM_HOLDEDNPCS";
 
 	// ------------------------------------------
 
@@ -15,6 +16,15 @@ namespace GOTHIC_ENGINE {
 
 	void oCGame::setHoldTime(bool toggle)			{ m_holdTime = toggle; }
 	const bool oCGame::isHoldTime()					{ return m_holdTime; }
+
+	void oCGame::addHoldedNpc(oCNpc* npc)			{ V_HoldedNpcsToSave.push_back(npc); }
+
+	void oCGame::removeHoldedNpc(oCNpc* npc)
+	{
+		for (auto it = V_HoldedNpcsToSave.begin(); it != V_HoldedNpcsToSave.end(); it++)
+			if (*it == npc)
+				V_HoldedNpcsToSave.erase(it);
+	}
 
 	template <typename T>
 	T oCGame::findSavedPosition(CStringA positionName)
@@ -79,7 +89,7 @@ namespace GOTHIC_ENGINE {
 	{
 		zSTRING targetDir = savegameManager->GetSlotDirName(slot);
 
-		zCArchiver* archiver = zarcFactory->CreateArchiverWrite(zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDPOSITIONS_FILENAME, zARC_MODE_BINARY_SAFE, TRUE, 0);
+		zCArchiver* archiver = zarcFactory->CreateArchiverWrite(zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDPOSITIONS_FILENAME + ".SAV", zARC_MODE_BINARY_SAFE, TRUE, 0);
 
 		std::sort(V_SavedPosition.begin(), V_SavedPosition.end());
 		std::map<CStringA, int> entries = getSavedPositionsEntries();
@@ -127,7 +137,7 @@ namespace GOTHIC_ENGINE {
 	{
 		zSTRING targetDir = savegameManager->GetSlotDirName(slot);
 
-		zSTRING saveFile = zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDPOSITIONS_FILENAME;
+		zSTRING saveFile = zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDPOSITIONS_FILENAME + ".SAV";
 		zFILE* file = zfactory->CreateZFile(saveFile);
 		if (!file->Exists())
 		{
@@ -135,7 +145,7 @@ namespace GOTHIC_ENGINE {
 			return;
 		}
 
-		zCArchiver* archiver = zarcFactory->CreateArchiverRead(zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDPOSITIONS_FILENAME, 0);
+		zCArchiver* archiver = zarcFactory->CreateArchiverRead(saveFile, 0);
 
 		int numWorlds = archiver->ReadInt("numWorlds");
 		
@@ -179,6 +189,50 @@ namespace GOTHIC_ENGINE {
 
 				V_SavedPosition.push_back(positionEntry{ currentWorld, positionName, trafo});
 			}
+		}
+
+		archiver->Close();
+		zRELEASE(archiver);
+	}
+
+	void oCGame::archiveHoldedNpcs(int slot)
+	{
+		zSTRING targetDir		= savegameManager->GetSlotDirName(slot);
+		zSTRING currentWorld	= GetGameWorld()->GetWorldName();
+
+		zCArchiver* archiver = zarcFactory->CreateArchiverWrite(zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDNPCS_FILENAME + "_" + currentWorld + ".SAV", zARC_MODE_ASCII, TRUE, 0);
+
+		archiver->WriteInt("numEntries", int(V_HoldedNpcsToSave.size()));
+
+		for (oCNpc* npc : V_HoldedNpcsToSave)
+			archiver->WriteObject(npc);
+
+		archiver->Close();
+		zRELEASE(archiver);
+	}
+
+	void oCGame::unarchiveHoldedNpcs(int slot)
+	{
+		zSTRING targetDir		= savegameManager->GetSlotDirName(slot);
+		zSTRING currentWorld	= GetGameWorld()->GetWorldName();
+
+		zSTRING saveFile = zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDNPCS_FILENAME + "_" + currentWorld + ".SAV";
+		zFILE* file = zfactory->CreateZFile(saveFile);
+		if (!file->Exists())
+		{
+			delete file;
+			return;
+		}
+
+		zCArchiver* archiver = zarcFactory->CreateArchiverRead(saveFile, 0);
+
+		int numEntries = archiver->ReadInt("numEntries");
+		oCNpc* npc = 0;
+		for (int i = 0; i < numEntries; i++)
+		{
+			npc = new oCNpc();
+			npc->setHolded(true);
+			archiver->ReadObject(npc);
 		}
 
 		archiver->Close();
@@ -230,6 +284,7 @@ namespace GOTHIC_ENGINE {
 		THISCALL(Ivk_oCGame_WriteSavegame)(slot, saveGlobals);
 
 		if (saveGlobals) archiveSavedPositions(slot);
+		archiveHoldedNpcs(slot);
 	}
 
 	HOOK Ivk_oCGame_LoadSavegame AS(&oCGame::LoadSavegame, &oCGame::LoadSavegame_IVK);
@@ -238,5 +293,6 @@ namespace GOTHIC_ENGINE {
 		THISCALL(Ivk_oCGame_LoadSavegame)(slot, loadGlobals);
 
 		if (loadGlobals) unarchiveSavedPositions(slot);
+		unarchiveHoldedNpcs(slot);
 	}
 }

@@ -28,6 +28,11 @@ T findSavedPosition(CStringA);
 void archiveSavedPositions(int);
 void unarchiveSavedPositions(int);
 
+void addHoldedNpc(oCNpc*);
+void removeHoldedNpc(oCNpc*);
+void archiveHoldedNpcs(int);
+void unarchiveHoldedNpcs(int);
+
 // ----------------------------------
 
 void ShowDebugInfos_IVK();

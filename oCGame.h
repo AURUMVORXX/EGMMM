@@ -15,7 +15,7 @@ namespace GOTHIC_ENGINE {
             return worldName < e.worldName;
         };
     };
-
     std::vector<positionEntry> V_SavedPosition;
 
+    std::vector<oCNpc*> V_HoldedNpcsToSave;
 }

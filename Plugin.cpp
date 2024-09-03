@@ -25,6 +25,7 @@ namespace GOTHIC_ENGINE {
   }
 
   void Game_PostLoop() {
+
   }
 
   void Game_MenuLoop() {
@@ -43,6 +44,7 @@ namespace GOTHIC_ENGINE {
   }
 
   void LoadEnd() {
+
   }
 
   void Game_LoadBegin_NewGame() {
