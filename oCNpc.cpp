@@ -102,6 +102,25 @@ namespace GOTHIC_ENGINE {
 				arc.WriteString("aniName", model->aniChannels[i]->protoAni->aniName);
 				arc.WriteFloat("aniFrame", model->aniChannels[i]->actFrame);
 			}
+
+			// Face anims
+			zCModelNodeInst* head	= model->SearchNode("BIP01 HEAD");
+			zCMorphMesh* headMesh	= zDYNAMIC_CAST<zCMorphMesh>(head->nodeVisual);
+
+			if (headMesh)
+			{
+				arc.WriteInt("numActiveFaceAnims", headMesh->aniChannels.GetNum());
+
+				for (int i = 0; i < headMesh->aniChannels.GetNum(); i++)
+				{
+					arc.WriteString("aniName", headMesh->aniChannels[i]->ani->aniName);
+					arc.WriteFloat("aniFrame", headMesh->aniChannels[i]->actFrame);
+				}
+			}
+			else
+			{
+				arc.WriteInt("numActiveFaceAnims", 0);
+			}
 		}
 	}
 
@@ -156,6 +175,38 @@ namespace GOTHIC_ENGINE {
 					{
 						model->aniChannels[i]->actFrame = aniFrame;
 						break;
+					}
+				}
+			}
+
+			// *** Face Anims ***
+
+			int numActiveFaceAnims = arc.ReadInt("numActiveFaceAnims");
+
+			zCModelNodeInst* head = model->SearchNode("BIP01 HEAD");
+			zCMorphMesh* headMesh = zDYNAMIC_CAST<zCMorphMesh>(head->nodeVisual);
+			zCMorphMesh::zTMorphAniEntry* faceAni;
+
+			if (headMesh)
+			{
+				for (int i = 0; i < numActiveFaceAnims; i++)
+				{
+					aniName		= arc.ReadString("aniName");
+					aniFrame	= arc.ReadInt("aniFrame");
+
+					headMesh->StartAni(aniName, 1.0F, -2);
+
+					for (int j = 0; j < headMesh->aniChannels.GetNum(); j++)
+					{
+						faceAni = headMesh->aniChannels[i];
+						if (headMesh->aniChannels[j]->ani->aniName == aniName)
+						{
+							faceAni->actFrame		= aniFrame;
+							faceAni->actFrameInt	= aniFrame;
+							faceAni->nextFrameInt	= aniFrame + 1;
+							faceAni->blendInSpeed	= zMDL_ANI_BLEND_IN_ZERO;
+							faceAni->blendOutSpeed	= zMDL_ANI_BLEND_OUT_ZERO;
+						}
 					}
 				}
 			}
