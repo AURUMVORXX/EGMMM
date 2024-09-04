@@ -192,7 +192,7 @@ namespace GOTHIC_ENGINE {
 				for (int i = 0; i < numActiveFaceAnims; i++)
 				{
 					aniName		= arc.ReadString("aniName");
-					aniFrame	= arc.ReadInt("aniFrame");
+					aniFrame	= arc.ReadFloat("aniFrame");
 
 					headMesh->StartAni(aniName, 1.0F, -2);
 
@@ -202,8 +202,8 @@ namespace GOTHIC_ENGINE {
 						if (headMesh->aniChannels[j]->ani->aniName == aniName)
 						{
 							faceAni->actFrame		= aniFrame;
-							faceAni->actFrameInt	= aniFrame;
-							faceAni->nextFrameInt	= aniFrame + 1;
+							faceAni->actFrameInt	= int(aniFrame);
+							faceAni->nextFrameInt	= int(aniFrame) + 1;
 							faceAni->blendInSpeed	= zMDL_ANI_BLEND_IN_ZERO;
 							faceAni->blendOutSpeed	= zMDL_ANI_BLEND_OUT_ZERO;
 						}

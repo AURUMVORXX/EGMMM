@@ -10,6 +10,8 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::init()
 	{
+		unarchiveAlias(-1, true);
+
 		registerCommand("ALIAS",				2, &AXConsole::cmd_registerAlias);
 
 		registerCommand("GOTO LOCATION",		0, &AXConsole::cmd_gotoLocation);
@@ -56,15 +58,37 @@ namespace GOTHIC_ENGINE {
 
 	void AXConsole::cmd_registerAlias(Array<CString> args, zSTRING& message)
 	{
+		bool flagGlobal			= false;
+		int currentArg			= 1;
+		CStringA aliasName		= "";
+		CStringA command		= "";
+		std::vector<CStringA> commands;
+
 		if (args[0] == "ALIAS" || isAlias(args[0])) return;
+		if (args[1] == "-G")
+		{
+			flagGlobal = true;
+			currentArg++;
+		}
 
-		CStringA command = "";
-
-		for (uint i = 1; i < args.GetNum(); i++)
-			command += args[i] + " ";
+		for (uint i = currentArg; i < args.GetNum(); i++)
+		{
+			if (args[i] != "&&")
+			{
+				command += args[i] + " ";
+			}
+			else
+			{
+				command.Shrink(' ');
+				commands.push_back(command);
+				command = "";
+			}
+		}
 
 		command.Shrink(' ');
-		registerAlias(args[0], command);
+		commands.push_back(command);
+
+		registerAlias(args[0], commands, flagGlobal);
 	}
 
 	void AXConsole::cmd_gotoLocation(Array<CString> args, zSTRING& message)

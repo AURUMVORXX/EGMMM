@@ -200,7 +200,7 @@ namespace GOTHIC_ENGINE {
 		zSTRING targetDir		= savegameManager->GetSlotDirName(slot);
 		zSTRING currentWorld	= GetGameWorld()->GetWorldName();
 
-		zCArchiver* archiver = zarcFactory->CreateArchiverWrite(zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDNPCS_FILENAME + "_" + currentWorld + ".SAV", zARC_MODE_ASCII, TRUE, 0);
+		zCArchiver* archiver = zarcFactory->CreateArchiverWrite(zoptions->GetDirString(DIR_SAVEGAMES) + targetDir + SAVEDNPCS_FILENAME + "_" + currentWorld + ".SAV", zARC_MODE_BINARY, TRUE, 0);
 
 		archiver->WriteInt("numEntries", int(V_HoldedNpcsToSave.size()));
 
@@ -285,7 +285,12 @@ namespace GOTHIC_ENGINE {
 	{
 		THISCALL(Ivk_oCGame_WriteSavegame)(slot, saveGlobals);
 
-		if (saveGlobals) archiveSavedPositions(slot);
+		if (saveGlobals)
+		{
+			archiveSavedPositions(slot);
+			AXConsole::get().archiveAlias(slot);
+		}
+
 		archiveHoldedNpcs(slot);
 	}
 
@@ -294,7 +299,12 @@ namespace GOTHIC_ENGINE {
 	{
 		THISCALL(Ivk_oCGame_LoadSavegame)(slot, loadGlobals);
 
-		if (loadGlobals) unarchiveSavedPositions(slot);
+		if (loadGlobals)
+		{
+			unarchiveSavedPositions(slot);
+			AXConsole::get().unarchiveAlias(slot);
+		}
+
 		unarchiveHoldedNpcs(slot);
 	}
 

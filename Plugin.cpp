@@ -41,6 +41,7 @@ namespace GOTHIC_ENGINE {
   }
 
   void LoadBegin() {
+      AXConsole::get().clearAlias();
   }
 
   void LoadEnd() {
